@@ -310,6 +310,67 @@ function checkMovement(source, dest) {
 				}
 			}
 		}
+		else {
+			r = false;
+		}
+	}
+	else if(source.getAttribute('src').includes("Bishop")) {
+		//console.log(si+"--"+di+"--"+sj+"--"+dj);
+		if(Math.abs(si-di) != Math.abs(sj-dj)) {
+			return false;
+		}
+		else if(si > di) {
+			if(sj > dj) {
+				sj--;
+				si--;
+				while(si > di && sj > dj) {
+					if(chessBoard[si][sj] != '') {
+						r = false;
+						break;
+					}
+					sj--;
+					si--;
+				}
+			}
+			else {
+				sj++;
+				si--;
+				while(si > di && sj < dj) {
+					if(chessBoard[si][sj] != '') {
+						r = false;
+						break;
+					}
+					sj++;
+					si--;
+				}
+			}
+		}
+		else {
+			if(sj > dj) {
+				sj--;
+				si++;
+				while(si < di && sj > dj) {
+					if(chessBoard[si][sj] != '') {
+						r = false;
+						break;
+					}
+					sj--;
+					si++;
+				}
+			}
+			else {
+				sj++;
+				si++;
+				while(si < di && sj < dj) {
+					if(chessBoard[si][sj] != '') {
+						r = false;
+						break;
+					}
+					sj++;
+					si++;
+				}
+			}
+		}
 	}
 	return r;
 }
