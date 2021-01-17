@@ -1,0 +1,46 @@
+
+body {
+  background-color: white;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#board {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+  background: url('board1.png') 0% 0% / 100% 100% no-repeat;
+  width: 560px; height: 560px;
+}
+
+div{
+ 	padding: 0;
+ 	margin: 0;
+ 	box-sizing: border-box;
+ }
+
+div:hover {
+	background-color: lightblue;
+}
+
+.cell {
+  width: 100%;
+  height: 100%;
+  max-width: 70px;
+  max-height: 70px;
+  float: left;
+  margin: 0px;
+  padding: 0px;
+}
+
+img{
+  cursor: grab;
+}
+
+#turnIndicator {
+  color:black;
+  text-align: center;
+  font-family: Arial;
+}
