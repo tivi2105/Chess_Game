@@ -1,4 +1,7 @@
 # Chess_Game
-A basic chess game without any engine. So, just a human on human type.
-I haven't finished the project yet, I have added the board, pieces but the movement of each piece is not fully functional.
+A basic chess game without any engine.
+I haven't finished the project yet, just added the board, pieces but the movement of each piece is not fully functional.
 Only the movment of a pawn and the rook are properly(as per the chess rules) coded.
+
+---17th jan 2021---
+Hey guys, just added code for bishop, check it out.
