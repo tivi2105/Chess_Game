@@ -9,6 +9,8 @@ let chessBoard =
 ['WP1', 'WP2', 'WP3', 'WP4', 'WP5', 'WP6', 'WP7', 'WP8'], 
 ['WR1', 'WK1', 'WBD', 'WQ', 'WK', 'WBL', 'WK2', 'WR2']];
 
+let movesList = document.getElementById('movesList');
+
 let  = document.getElementById('board');
 let moveMentCount = 0;
 let turn = 'w', validChance = true;
@@ -29,6 +31,11 @@ function loadBody(board) {
 			board.appendChild(box);
 		}
 	}
+	let move = document.createElement("label");
+	move.innerHTML = "White to Move";
+	move.id = "turnIndicator";
+	movesList.appendChild(move);
+	movesList.appendChild(document.createElement("br"));
 }
 
 function movePiece(box) {
@@ -144,6 +151,7 @@ function drop(ev) {
 		x.style = "cursor: grab;";
 		t.replaceChildren(x);
 		updateBoard(data, ev.target.id);
+		addMoves(data, ev.target.id);
 	}
 	if(turn == 'b') {
 		document.getElementById('turnIndicator').innerHTML = 'Black to Move';
@@ -226,6 +234,8 @@ function checkMovement(source, dest) {
 	let r = true;
 	let si = 8-parseInt(source.id[1]), sj = source.id.charCodeAt(0)-97;
 	let di = 8-parseInt(dest.id[1]), dj = dest.id.charCodeAt(0)-97;
+	/*console.log(si+"--"+sj);
+	console.log(di+"--"+dj);*/
 	if(source.getAttribute('src').includes("Pawn")) {
 		if(source.getAttribute('src').includes("white")) {
 			/*console.log(si+"--"+sj);
@@ -314,6 +324,19 @@ function checkMovement(source, dest) {
 			r = false;
 		}
 	}
+	else if(source.getAttribute('src').includes("Knight")) {
+		/*console.log(si+"---"+sj);
+		console.log(di+"---"+dj);*/
+		if(Math.abs(si-di) == 2 && Math.abs(sj-dj) == 1) {
+			r = true;
+		}
+		else if(Math.abs(si-di) == 1 && Math.abs(sj-dj) == 2) {
+			r = true;
+		}
+		else {
+			r = false;
+		}
+	}
 	else if(source.getAttribute('src').includes("Bishop")) {
 		//console.log(si+"--"+di+"--"+sj+"--"+dj);
 		if(Math.abs(si-di) != Math.abs(sj-dj)) {
@@ -370,6 +393,129 @@ function checkMovement(source, dest) {
 					si++;
 				}
 			}
+		}
+	}
+	else if(source.getAttribute('src').includes("Queen")) {
+		let siTemp = si, diTemp = di, sjTemp = sj, djTemp = dj;
+		if(si == di) {
+			if(sj > dj) {
+				sj--;
+				while(sj > dj) {
+					if(chessBoard[si][sj] != '') {
+						r = false;
+						break;
+					}
+					sj--;
+				}
+			}
+			else if(sj < dj) {
+				sj++;
+				while(sj < dj) {
+					if(chessBoard[si][sj] != '') {
+						r = false;
+						break;
+					}
+					sj++;
+				}
+			}
+		}
+		else if(sj == dj) {
+			if(si > di) {
+				si--;
+				while(si > di) {
+					if(chessBoard[si][sj] != '') {
+						r = false;
+						break;
+					}
+					si--;
+				}
+			}
+			else if(si < di) {
+				si++;
+				while(si < di) {
+					if(chessBoard[si][sj] != '') {
+						r = false;
+						break;
+					}
+					si++;
+				}
+			}
+		}
+		else if(Math.abs(si-di) != Math.abs(sj-dj)) {
+			return false;
+		}
+		else if(si > di) {
+			if(sj > dj) {
+				sj--;
+				si--;
+				while(si > di && sj > dj) {
+					if(chessBoard[si][sj] != '') {
+						r = false;
+						break;
+					}
+					sj--;
+					si--;
+				}
+			}
+			else if(sj < dj) {
+				sj++;
+				si--;
+				while(si > di && sj < dj) {
+					if(chessBoard[si][sj] != '') {
+						r = false;
+						break;
+					}
+					sj++;
+					si--;
+				}
+			}
+		}
+		else if(si < di) {
+			if(sj > dj) {
+				sj--;
+				si++;
+				while(si < di && sj > dj) {
+					if(chessBoard[si][sj] != '') {
+						r = false;
+						break;
+					}
+					sj--;
+					si++;
+				}
+			}
+			else if(sj < dj) {
+				sj++;
+				si++;
+				while(si < di && sj < dj) {
+					if(chessBoard[si][sj] != '') {
+						r = false;
+						break;
+					}
+					sj++;
+					si++;
+				}
+			}
+
+		}	
+		else {
+			r = false;
+		}
+	}
+	else {
+		/*console.log(si+"---"+sj);
+		console.log(di+"---"+dj);
+		console.log(di == dj && Math.abs(si - sj) == 1);*/
+		if(si == di && Math.abs(sj - dj) == 1) {
+			r = true;
+		}
+		else if(sj == dj && Math.abs(si - di) == 1) {
+			r = true;
+		}
+		else if(Math.abs(si-di) == 1 && Math.abs(sj-dj) == 1) {
+			r = true;
+		}
+		else {
+			r = false;
 		}
 	}
 	return r;
@@ -431,4 +577,23 @@ function showValidMoves(event) {
 			}
 		}
 	}
+}
+
+function addMoves(source, dest) {
+	let moveTurn = '', seperator = '--';
+	if(turn == 'w') {
+		moveTurn = 'b';
+	}
+	else {
+		moveTurn = 'w';
+	}
+	let move = document.createElement("label");
+	if(dest.length > 3) {
+		dest = dest.substring(0, 2);
+		seperator = 'X'
+	}
+	move.innerHTML = moveTurn+source.substring(0, 2) +seperator+ dest;
+	//console.log(source.substring(0, 2) +seperator+ dest);
+	movesList.appendChild(move);
+	movesList.appendChild(document.createElement("br"));
 }
